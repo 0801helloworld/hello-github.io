@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>升学宴邀请函 · 李雨桐</title>
+    <style>
+        /* ── 字体与重置 ── */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+    
+        :root {
+            --crimson: #8B1A1A;
+            --gold: #C9A84C;
+            --gold-lt: #E8D08A;
+            --parchment: #FAF6EE;
+            --ink: #2A1A0E;
+            --ink-lt: #5C3D2E;
+        }
+    
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: 'Noto Serif SC', 'SimSun', serif;
+            background: radial-gradient(ellipse at 55% 35%, #f7edce 0%, #e8c87a 50%, #c89040 100%);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+    
+        /* ── 飘落花瓣 ── */
+        .petal {
+            position: fixed;
+            top: -60px;
+            pointer-events: none;
+            opacity: .75;
+            animation: fall linear infinite;
+            z-index: 0;
+        }
+    
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    
+        /* ═══════ 信封屏幕 ═══════ */
+        #env-screen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: opacity .35s ease, transform .35s ease;
+            cursor: pointer;
+            /* 点击任意处打开 */;
+        }
+    
+        #env-screen.hide {
+            opacity: 0;
+            transform: scale(.92);
+            pointer-events: none;
+        }
+    
+        #envelope {
+            width: min(360px, 85vw);
+            position: relative;
+            filter: drop-shadow(0 16px 40px rgba(80, 30, 0, .30));
+            transition: transform .2s;
+        }
+    
+        #envelope:active {
+            transform: scale(0.96);
+        }
+    
+        #env-svg {
+            width: 100%;
+            display: block;
+        }
+    
+        .seal {
+            position: absolute;
+            width: 56px;
+            height: 56px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -18%);
+            background: radial-gradient(circle at 38% 35%, #e03030 0%, #8b0000 75%);
+            border-radius: 50%;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform .2s;
+            z-index: 20;
+        }
+    
+        .seal-char {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--gold-lt);
+            font-family: 'Noto Serif SC', serif;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+        }
+    
+        #hint {
+            margin-top: 20px;
+            font-size: 13px;
+            letter-spacing: .16em;
+            color: var(--ink);
+            opacity: .7;
+            animation: pulse 2.2s ease-in-out infinite;
+        }
+    
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: .4;
+            }
+            50% {
+                opacity: .85;
+            }
+        }
+    
+        /* ═══════ 卡片屏幕 ═══════ */
+        #card-screen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            opacity: 0;
+            transform: scale(.94) translateY(16px);
+            pointer-events: none;
+            transition: opacity .4s .05s ease, transform .4s .05s cubic-bezier(.2, .8, .3, 1);
+            overflow-y: auto;
+            padding: 16px 0;
+        }
+    
+        #card-screen.show {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+    
+        #card {
+            width: min(400px, 92vw);
+            background: var(--parchment);
+            border-radius: 10px;
+            box-shadow: 0 28px 80px rgba(80, 20, 0, .30);
+            overflow: hidden;
+            position: relative;
+        }
+    
+        .card-header {
+            background: var(--crimson);
+            padding: 22px 16px 18px;
+            text-align: center;
+            position: relative;
+        }
+    
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: -14px;
+            left: 0;
+            right: 0;
+            height: 28px;
+            background: var(--parchment);
+            clip-path: polygon(0 100%, 4% 40%, 8% 100%, 12% 40%, 17% 100%, 21% 40%, 25% 100%,
+                    29% 40%, 33% 100%, 37% 40%, 42% 100%, 46% 40%, 50% 100%,
+                    54% 40%, 58% 100%, 63% 40%, 67% 100%, 71% 40%, 75% 100%,
+                    79% 40%, 83% 100%, 88% 40%, 92% 100%, 96% 40%, 100% 100%);
+        }
+    
+        .orn {
+            position: absolute;
+            font-size: 18px;
+            color: var(--gold-lt);
+            opacity: .85;
+        }
+        .orn.tl {
+            top: 8px;
+            left: 10px;
+        }
+        .orn.tr {
+            top: 8px;
+            right: 10px;
+        }
+    
+        .banner-title {
+            font-size: clamp(18px, 4.8vw, 24px);
+            font-weight: 700;
+            color: var(--gold-lt);
+            letter-spacing: .35em;
+            text-indent: .35em;
+        }
+    
+        .banner-sub {
+            font-size: 11px;
+            color: rgba(232, 208, 138, .72);
+            letter-spacing: .2em;
+            margin-top: 4px;
+        }
+    
+        .card-body {
+            padding: 30px 20px 18px;
+        }
+    
+        .greeting {
+            font-size: 13px;
+            color: var(--ink-lt);
+            letter-spacing: .12em;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+    
+        .name-hero {
+            text-align: center;
+            margin: 4px 0 16px;
+        }
+    
+        .name-hero .name {
+            display: block;
+            font-size: clamp(26px, 6.5vw, 36px);
+            font-weight: 700;
+            color: var(--crimson);
+            letter-spacing: .3em;
+            text-indent: .3em;
+            line-height: 1.2;
+        }
+    
+        .name-hero .sub {
+            display: block;
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--gold);
+            letter-spacing: .22em;
+        }
+    
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+        }
+    
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+        }
+    
+        .divider span {
+            font-size: 14px;
+            color: var(--gold);
+        }
+    
+        .body-text {
+            font-size: clamp(12px, 2.8vw, 13.5px);
+            line-height: 2;
+            color: var(--ink-lt);
+            letter-spacing: .07em;
+            text-indent: 2em;
+            margin-bottom: 12px;
+        }
+    
+        .info-block {
+            background: linear-gradient(135deg, rgba(139, 26, 26, .05), rgba(201, 168, 76, .07));
+            border: 1px solid rgba(201, 168, 76, .28);
+            border-radius: 7px;
+            padding: 12px 14px;
+            margin: 14px 0;
+        }
+    
+        .info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 6px 0;
+        }
+    
+        .info-row+.info-row {
+            border-top: 1px dashed rgba(201, 168, 76, .22);
+        }
+    
+        .info-icon {
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+    
+        .info-label {
+            font-size: 11px;
+            color: var(--gold);
+            letter-spacing: .1em;
+        }
+    
+        .info-value {
+            font-size: 13px;
+            color: var(--ink);
+            font-weight: 600;
+            letter-spacing: .07em;
+            margin-top: 2px;
+        }
+    
+        .closing {
+            text-align: center;
+            margin-top: 14px;
+        }
+    
+        .wish {
+            font-size: clamp(15px, 4vw, 18px);
+            font-weight: 700;
+            color: var(--crimson);
+            letter-spacing: .32em;
+            text-indent: .32em;
+        }
+    
+        .sign {
+            font-size: 12px;
+            color: var(--ink-lt);
+            letter-spacing: .12em;
+            margin-top: 6px;
+        }
+    
+        #rsvp-btn {
+            display: block;
+            margin: 16px auto 0;
+            padding: 12px 32px;
+            background: linear-gradient(135deg, var(--crimson), #a52020);
+            color: var(--gold-lt);
+            border: none;
+            border-radius: 26px;
+            font-family: inherit;
+            font-size: 14px;
+            letter-spacing: .2em;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(139, 26, 26, .3);
+            transition: transform .15s, box-shadow .15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+    
+        #rsvp-btn:active {
+            transform: scale(0.94);
+        }
+    
+        .card-footer {
+            background: var(--crimson);
+            padding: 10px;
+            text-align: center;
+            font-size: 11px;
+            color: rgba(232, 208, 138, .7);
+            letter-spacing: .18em;
+            margin-top: 16px;
+        }
+    
+        #card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-style: solid;
+            border-width: 0 20px 20px 0;
+            border-color: transparent rgba(201, 168, 76, .35) transparent transparent;
+        }
+    
+        /* ── 动画 ── */
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(110vh) rotate(1080deg);
+                opacity: 0;
+            }
+        }
+    
+        @keyframes spark {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(0);
+                opacity: 0;
+            }
+        }
+    
+        /* 移动端优化 */
+        @media (max-width: 440px) {
+            .card-body {
+                padding: 20px 14px 14px;
+            }
+            .seal {
+                width: 44px;
+                height: 44px;
+            }
+            .seal-char {
+                font-size: 18px;
+            }
+            #rsvp-btn {
+                padding: 10px 24px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="petals"></div>
+    
+    <!-- ── 信封屏幕 ── -->
+    <div id="env-screen" onclick="openInvite()">
+        <div id="envelope">
+            <svg id="env-svg" viewBox="0 0 380 236" xmlns="http://www.w3.org/2000/svg">
+                <rect width="380" height="236" rx="7" fill="url(#bodyGrad)" />
+                <polygon points="0,0 190,118 0,236" fill="url(#leftGrad)" />
+                <polygon points="380,0 190,118 380,236" fill="url(#rightGrad)" />
+                <polygon points="0,236 190,118 380,236" fill="url(#bottomGrad)" />
+                <polygon points="0,0 380,0 190,130" fill="url(#flapGrad)" />
+                <line x1="0" y1="0" x2="190" y2="130" stroke="rgba(160,100,20,.18)" stroke-width="1" />
+                <line x1="380" y1="0" x2="190" y2="130" stroke="rgba(160,100,20,.18)" stroke-width="1" />
+                <line x1="40" y1="0" x2="190" y2="118" stroke="rgba(220,170,60,.12)" stroke-width="1.5" />
+                <line x1="340" y1="0" x2="190" y2="118" stroke="rgba(220,170,60,.12)" stroke-width="1.5" />
+                <defs>
+                    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#d4a44c" />
+                        <stop offset="100%" stop-color="#b8752a" />
+                    </linearGradient>
+                    <linearGradient id="leftGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#c08030" />
+                        <stop offset="100%" stop-color="#d4a44c" />
+                    </linearGradient>
+                    <linearGradient id="rightGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#d4a44c" />
+                        <stop offset="100%" stop-color="#c08030" />
+                    </linearGradient>
+                    <linearGradient id="bottomGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#cf9840" />
+                        <stop offset="100%" stop-color="#a06018" />
+                    </linearGradient>
+                    <linearGradient id="flapGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#e0b868" />
+                        <stop offset="100%" stop-color="#c08030" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div class="seal"><span class="seal-char">學</span></div>
+        </div>
+        <div id="hint">✦ 点击信封，开启邀请 ✦</div>
+    </div>
+    
+    <!-- ── 卡片屏幕 ── -->
+    <div id="card-screen">
+        <div id="card">
+            <div class="card-header">
+                <span class="orn tl">❧</span>
+                <span class="orn tr">❧</span>
+                <div class="banner-title">升 学 宴 邀 请 函</div>
+                <div class="banner-sub">金榜题名 · 共襄盛举</div>
+            </div>
+    
+            <div class="card-body">
+                <p class="greeting">亲爱的亲朋好友：</p>
+    
+                <div class="name-hero">
+                    <span class="name">李 雨 桐</span>
+                    <span class="sub">金榜题名 · 喜迎大学</span>
+                </div>
+    
+                <div class="divider"><span>✦</span></div>
+    
+                <p class="body-text">
+                    十年寒窗苦读，终迎金榜题名。小儿李雨桐经过不懈努力，顺利考取大学，这是他人生道路上的重要里程碑，也凝聚着各位亲朋好友的关心、支持与祝福。
+                </p>
+                <p class="body-text">
+                    今特备薄酒，恭请各位赏光莅临，共证这美好时刻。您的到来，将是对孩子最大的鼓励，也是我们全家的荣幸！
+                </p>
+    
+                <div class="info-block">
+                    <div class="info-row">
+                        <span class="info-icon">🗓</span>
+                        <div>
+                            <div class="info-label">宴 请 时 间</div>
+                            <div class="info-value">__2026__年 ___8_月 __5__日　</div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <div class="info-label"> 垫江蓝花旗酒店</div>
+                            <div class="info-value">___________________________</div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="closing">
+                    <div class="wish">恭 候 光 临</div>
+                    <div class="sign">邀请人：李雨桐父母　敬上</div>
+                </div>
+    
+                <button id="rsvp-btn" onclick="rsvp(event)">📩 我会准时出席</button>
+            </div>
+    
+            <div class="card-footer">❋ 满天星斗，皆是你前行的灯 ❋</div>
+        </div>
+    </div>
+    
+    <script>
+        /* ── 生成花瓣 ── */
+        (function createPetals() {
+            const PETALS = ['🌸', '🌺', '✿', '❀'];
+            const container = document.getElementById('petals');
+            for (let i = 0; i < 20; i++) {
+                const p = document.createElement('div');
+                p.className = 'petal';
+                p.textContent = PETALS[i % PETALS.length];
+                p.style.cssText =
+                    `left:${Math.random()*100}vw; font-size:${10+Math.random()*14}px; animation-duration:${7+Math.random()*10}s; animation-delay:${-Math.random()*14}s;`;
+                container.appendChild(p);
+            }
+        })();
+    
+        /* ── 打开邀请函（点击信封或屏幕） ── */
+        function openInvite() {
+            const env = document.getElementById('env-screen');
+            if (env.classList.contains('hide')) return; // 防止重复触发
+            env.classList.add('hide');
+            setTimeout(() => {
+                document.getElementById('card-screen').classList.add('show');
+                launchConfetti();
+            }, 300);
+        }
+    
+        /* ── 彩纸特效 ── */
+        function launchConfetti() {
+            const colors = ['#C9A84C', '#8B1A1A', '#E8D08A', '#fff4cc', '#f4a0a0', '#ffd6d6'];
+            for (let i = 0; i < 80; i++) {
+                const c = document.createElement('div');
+                const size = 5 + Math.random() * 9;
+                c.style.cssText = `
+                    position:fixed; pointer-events:none; z-index:999;
+                    left:${15+Math.random()*70}vw; top:30vh;
+                    width:${size}px; height:${size}px;
+                    background:${colors[Math.floor(Math.random()*colors.length)]};
+                    border-radius:${Math.random()>.5?'50%':'2px'};
+                    animation:confetti-fall ${1+Math.random()*2}s ${Math.random()*.4}s ease-in forwards;
+                `;
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 3500);
+            }
+        }
+    
+        /* ── RSVP 按钮 ── */
+        function rsvp(e) {
+            e.stopPropagation();
+            const btn = document.getElementById('rsvp-btn');
+            if (btn.disabled) return;
+            btn.textContent = '🎉 已确认出席，感谢您！';
+            btn.style.background = 'linear-gradient(135deg,#2e7d32,#1b5e20)';
+            btn.disabled = true;
+    
+            // 小星星特效
+            const rect = btn.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2,
+                cy = rect.top + rect.height / 2;
+            for (let i = 0; i < 20; i++) {
+                const s = document.createElement('div');
+                const angle = (i / 20) * 360;
+                const dist = 50 + Math.random() * 40;
+                s.style.cssText = `
+                    position:fixed; left:${cx}px; top:${cy}px;
+                    width:8px; height:8px; border-radius:50%;
+                    background:#C9A84C;
+                    --dx:${Math.cos(angle*Math.PI/180)*dist}px;
+                    --dy:${Math.sin(angle*Math.PI/180)*dist}px;
+                    animation:spark .6s ease-out forwards;
+                    pointer-events:none; z-index:9999;
+                `;
+                document.body.appendChild(s);
+                setTimeout(() => s.remove(), 700);
+            }
+        }
+    
+        /* ── 如果希望页面加载后自动打开，取消注释以下代码并注释掉上面的 openInvite 绑定 ── */
+        // window.addEventListener('DOMContentLoaded', function() {
+        //     // 延迟 0.5 秒自动打开，若想立即打开设为 0
+        //     setTimeout(openInvite, 500);
+        // });
+    </script>
+
+</body>
+</html>
